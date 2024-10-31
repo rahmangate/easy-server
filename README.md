@@ -34,12 +34,12 @@ A Node.js application using TypeScript, Mongoose, and Express with JWT authentic
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/username/repo-name.git
+   git clone https://github.com/rahmangate/easy-server.git
    ```
 
 2. Navigate to the project directory:
    ```bash
-   cd repo-name
+   cd easy-server
    ```
 
 3. Install dependencies:
