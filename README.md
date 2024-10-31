@@ -92,7 +92,7 @@ MONGO_URI=mongodb://localhost:27017/your-database
 LOG_LEVEL=info
 ```
 
-> **Note**: Adjust the `MONGO_URI` and `JWT_SECRET` according to your setup.
+> **Note**: Adjust the `MONGO_URI`  according to your setup.
 
 ## API Endpoints
 
