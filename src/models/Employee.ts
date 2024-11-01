@@ -5,12 +5,11 @@ export enum RoleName {
   "regular" = "regular",
 }
 
-// Define an interface for the Employee schema to use with TypeScript
 interface EmployeeDocument extends Document {
   username: string;
   email: string;
   password: string;
-  employeeId: mongoose.Types.ObjectId | any; // Use mongoose.Types.ObjectId for better compatibility
+  employeeId: mongoose.Types.ObjectId | any;
   id: mongoose.Types.ObjectId | any;
   locationId: string;
   organizationId: string;

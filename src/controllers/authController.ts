@@ -11,7 +11,7 @@ export const registerEmployee = async (
   next: NextFunction
 ) => {
   try {
-    const { name, position, department, email, password } = req.body;
+    const { email } = req.body;
 
     const existingEmployee = await Employee.findOne({ email });
 
@@ -19,16 +19,21 @@ export const registerEmployee = async (
       throw new AppError("Employee already exists", 401);
     }
 
+    const hash = AuthManager.hashPassword(req.body.password);
     const employee = new Employee({
-      name,
-      position,
-      department,
-      email,
-      password,
+      username: req.body.username,
+      email: req.body.email,
+      password: hash,
+      locationId: req.body.locationId,
+      organizationId: req.body.organizationId,
+      partnerId: req.body.partnerId,
+      payrollId: req.body.payrollId,
+      employerPayrollId: req.body.employerPayrollId,
+      accessRole: req.body.accessRole,
+      role: req.body.role,
     });
-    await employee.save();
 
-    const token = AuthManager.generateToken(employee);
+    await employee.save();
 
     res.status(201).json({ success: true });
   } catch (error) {
