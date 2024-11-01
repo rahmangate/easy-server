@@ -8,24 +8,25 @@ export const createEmployee = async (
 ) => {
   try {
     const {
-      name,
       username,
-      position,
-      department,
+      email,
       locationId,
+      organizationId,
       partnerId,
       payrollId,
+      employerPayrollId,
       accessRole,
       role,
     } = req.body;
+
     const employee = new Employee({
-      name,
       username,
-      position,
-      department,
+      email,
       locationId,
+      organizationId,
       partnerId,
       payrollId,
+      employerPayrollId,
       accessRole,
       role,
     });
