@@ -49,6 +49,7 @@ export const updateSetting = async (
     const { isGlobalTrackingEnabled } = req.body;
 
     const setting = await Setting.findOne();
+
     if (!setting) {
       return res
         .status(404)

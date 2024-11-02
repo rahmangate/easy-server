@@ -14,9 +14,9 @@ const seedData = async () => {
       };
 
       await Setting.create(settings);
-      console.log("Settings seeded successfully.");
+      Logger.info("Settings seeded successfully.");
     } else {
-      console.log("Settings already exist. Seeding skipped.");
+      Logger.info("Settings already exist. Seeding skipped.");
     }
 
     // Check if locations exist (you can add a similar logic for locations)

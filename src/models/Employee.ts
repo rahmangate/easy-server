@@ -1,10 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-export enum RoleName {
-  "admin" = "admin",
-  "regular" = "regular",
-}
-
 interface EmployeeDocument extends Document {
   username: string;
   email: string;

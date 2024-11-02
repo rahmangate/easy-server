@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import Employee, { RoleName } from "../models/Employee";
+import Employee from "../models/Employee";
 
 import { AppError } from "../utils/appError";
 import { Setting } from "../models/Setting";
 import AuthManager from "../services/authManager";
+import Logger from "../utils/logger";
+import mongoose from "mongoose";
 
 export const registerEmployee = async (
   req: Request,
@@ -19,8 +21,12 @@ export const registerEmployee = async (
       throw new AppError("Employee already exists", 401);
     }
 
-    const hash = AuthManager.hashPassword(req.body.password);
+    const employeeId = new mongoose.Types.ObjectId();
+    const id = new mongoose.Types.ObjectId();
+    const hash = await AuthManager.hashPassword(req.body.password);
     const employee = new Employee({
+      id,
+      employeeId,
       username: req.body.username,
       email: req.body.email,
       password: hash,
@@ -37,6 +43,7 @@ export const registerEmployee = async (
 
     res.status(201).json({ success: true });
   } catch (error) {
+    Logger.error(error);
     next(error);
   }
 };
@@ -83,14 +90,14 @@ export const loginEmployee = async (
     // Determine the employees data to return based on role
     let employeesToReturn;
 
-    if (employee.role.name === RoleName.admin) {
+    if (employee.role.name === "admin") {
       // Only fetch all employees if the user is an admin
       const allEmployees = await Employee.find();
-      employeesToReturn = allEmployees.map((emp) => ({
+      employeesToReturn = allEmployees.map((emp, index) => ({
         id: emp._id,
         payrollId: emp.payrollId,
         name: emp.username,
-        picture: "https://randomuser.me/api/portraits/men/1.jpg",
+        picture: `https://randomuser.me/api/portraits/men/${index + 1}.jpg`,
       }));
     } else {
       // For regular users, only return their own data
@@ -105,7 +112,7 @@ export const loginEmployee = async (
     }
 
     // Generate token
-    const token = AuthManager.generateToken(payload);
+    const token = await AuthManager.generateToken(payload);
 
     // Send the response with the necessary data
     res.header("auth-token", token).json({

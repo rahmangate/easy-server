@@ -15,8 +15,9 @@ export const protect = async (
 
   if (token) {
     try {
-      const decoded = AuthManager.verifyToken(token);
-      req.employee = await Employee.findById(decoded.id).select("-password");
+      const decoded = await AuthManager.verifyToken(token);
+
+      //req.employee = await Employee.findById(decoded.id).select("-password");
       next();
     } catch (error) {
       res.status(401).json({ success: false, message: "Not authorized" });

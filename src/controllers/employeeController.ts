@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Employee from "../models/Employee";
+import mongoose from "mongoose";
 
 export const createEmployee = async (
   req: Request,
@@ -19,6 +20,8 @@ export const createEmployee = async (
       role,
     } = req.body;
 
+    const employeeId = new mongoose.Types.ObjectId();
+    const id = new mongoose.Types.ObjectId();
     const employee = new Employee({
       username,
       email,
@@ -26,6 +29,8 @@ export const createEmployee = async (
       organizationId,
       partnerId,
       payrollId,
+      employeeId,
+      id,
       employerPayrollId,
       accessRole,
       role,
