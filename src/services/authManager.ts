@@ -1,36 +1,61 @@
-import Logger from "../utils/logger";
-
+import jwt from "jsonwebtoken";
+import path from "path";
+import fs from "fs";
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const path = require("path");
-const fs = require("fs").promises;
 
 class AuthManager {
-  static privateKey = null;
+  private static instance: AuthManager;
+  private privateKey: string | null = null;
 
-  static async initialize() {
-    if (!this.privateKey) {
+  private constructor() {}
+
+  static getInstance(): AuthManager {
+    if (!AuthManager.instance) {
+      AuthManager.instance = new AuthManager();
+    }
+    return AuthManager.instance;
+  }
+
+  private async readKey(): Promise<string> {
+    return new Promise((resolve, reject) => {
       const privateKeyPath = path.join(__dirname, "../../priv.key");
-      this.privateKey = await fs.readFile(privateKeyPath, "utf8");
-      Logger.info("pivate key loaded..");
+      fs.readFile(privateKeyPath, "utf8", (err, data) => {
+        if (err) {
+          reject(new Error("Failed to load private key: " + err.message));
+        } else {
+          resolve(data);
+        }
+      });
+    });
+  }
+
+  async initialize() {
+    if (!this.privateKey) {
+      this.privateKey = await this.readKey();
     }
   }
 
-  static async hashPassword(password: string) {
-    return await bcrypt.hash(password, 10);
+  hashPassword(password: string) {
+    return bcrypt.hash(password, 10);
   }
 
-  static async comparePassword(password: string, hashedPassword: string) {
-    return await bcrypt.compare(password, hashedPassword);
+  comparePassword(password: string, hashedPassword: string) {
+    return bcrypt.compare(password, hashedPassword);
   }
 
-  static generateToken(payload: any) {
+  generateToken(payload: any) {
+    if (!this.privateKey) {
+      throw new Error("Private key is not initialized.");
+    }
     return jwt.sign(payload, this.privateKey, { algorithm: "RS256" });
   }
 
-  static verifyToken(token: any) {
-    return jwt.verify(token, this.privateKey, { algorithm: "RS256" });
+  verifyToken(token: string) {
+    if (!this.privateKey) {
+      throw new Error("Private key is not initialized.");
+    }
+    return jwt.verify(token, this.privateKey, { algorithms: ["RS256"] });
   }
 }
 
-export default AuthManager;
+export default AuthManager.getInstance();
