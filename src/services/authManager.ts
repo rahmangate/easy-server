@@ -1,13 +1,20 @@
+import Logger from "../utils/logger";
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const path = require("path");
-const fs = require("fs");
+const fs = require("fs").promises;
 
 class AuthManager {
-  static privateKey = fs.readFileSync(
-    path.join(__dirname, "../../priv.key"),
-    "utf8"
-  );
+  static privateKey = null;
+
+  static async initialize() {
+    if (!this.privateKey) {
+      const privateKeyPath = path.join(__dirname, "../../priv.key");
+      this.privateKey = await fs.readFile(privateKeyPath, "utf8");
+      Logger.info("pivate key loaded..");
+    }
+  }
 
   static async hashPassword(password: string) {
     return await bcrypt.hash(password, 10);

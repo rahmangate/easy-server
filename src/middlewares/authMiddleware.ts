@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Employee from "../models/Employee";
+
 import AuthManager from "../services/authManager";
 
 interface AuthRequest extends Request {
@@ -15,7 +15,8 @@ export const protect = async (
 
   if (token) {
     try {
-      await AuthManager.verifyToken(token);
+      AuthManager.verifyToken(token);
+
       next();
     } catch (error) {
       res.status(401).json({ success: false, message: error });

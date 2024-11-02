@@ -106,7 +106,7 @@ export const loginEmployee = async (
       ];
     }
 
-    const token = await AuthManager.generateToken(payload);
+    const token = AuthManager.generateToken(payload);
 
     res.header("auth-token", token).json({
       token,
