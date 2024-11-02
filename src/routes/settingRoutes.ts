@@ -1,4 +1,3 @@
-// routes/settingRoutes.ts
 import { Router } from "express";
 import {
   createSetting,

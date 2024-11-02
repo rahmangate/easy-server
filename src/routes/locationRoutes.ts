@@ -6,7 +6,7 @@ import {
 
 const router = Router();
 
-router.post("/", createLocation); // CREATE endpoint
-router.get("/", getLocations); // READ endpoint
+router.post("/", createLocation);
+router.get("/", getLocations);
 
 export default router;

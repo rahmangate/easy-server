@@ -1,9 +1,7 @@
-// controllers/settingController.ts
 import { Request, Response, NextFunction } from "express";
 import { Setting } from "../models/Setting";
 import { AppError } from "../utils/appError";
 
-// Create setting
 export const createSetting = async (
   req: Request,
   res: Response,
@@ -21,7 +19,6 @@ export const createSetting = async (
   }
 };
 
-// Get setting
 export const getSetting = async (
   req: Request,
   res: Response,
@@ -39,7 +36,6 @@ export const getSetting = async (
   }
 };
 
-// Update setting
 export const updateSetting = async (
   req: Request,
   res: Response,

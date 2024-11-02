@@ -21,7 +21,6 @@ interface EmployeeDocument extends Document {
   deleted_at?: Date | null;
 }
 
-// Create the Employee schema
 const EmployeeSchema = new Schema<EmployeeDocument>(
   {
     username: { type: String, required: true, unique: true },
@@ -33,12 +32,12 @@ const EmployeeSchema = new Schema<EmployeeDocument>(
     },
     password: { type: String, required: true },
     employeeId: {
-      type: mongoose.Types.ObjectId, // Ensure you use mongoose.Types.ObjectId here
+      type: mongoose.Types.ObjectId,
       required: true,
       unique: true,
     },
     id: {
-      type: mongoose.Types.ObjectId, // Ensure you use mongoose.Types.ObjectId here
+      type: mongoose.Types.ObjectId,
       required: true,
       unique: true,
     },
@@ -77,13 +76,11 @@ const EmployeeSchema = new Schema<EmployeeDocument>(
   { timestamps: true }
 );
 
-// Pre-save hook to set employeeId and id to _id
 EmployeeSchema.pre<EmployeeDocument>("save", function (next) {
-  const employeeDoc = this as EmployeeDocument; // Type assertion here
+  const employeeDoc = this as EmployeeDocument;
 
-  // Ensure that the fields are assigned correctly
-  employeeDoc.employeeId = employeeDoc.employeeId || employeeDoc._id; // Set employeeId if it's not already set
-  employeeDoc.id = employeeDoc.id || employeeDoc._id; // Set id if it's not already set
+  employeeDoc.employeeId = employeeDoc.employeeId || employeeDoc._id;
+  employeeDoc.id = employeeDoc.id || employeeDoc._id;
 
   next();
 });

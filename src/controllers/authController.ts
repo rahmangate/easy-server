@@ -56,7 +56,6 @@ export const loginEmployee = async (
   const { email, password } = req.body;
 
   try {
-    // Fetch the employee and settings in parallel
     const [employee, settings] = await Promise.all([
       Employee.findOne({ email }),
       Setting.findOne(),
@@ -74,7 +73,6 @@ export const loginEmployee = async (
       throw new AppError("Invalid password.", 400);
     }
 
-    // Prepare the token payload
     const employeePayload = employee.toObject();
     const payload = {
       employeeId: employeePayload._id,
@@ -87,11 +85,9 @@ export const loginEmployee = async (
       role: employeePayload.role,
     };
 
-    // Determine the employees data to return based on role
     let employeesToReturn;
 
     if (employee.role.name === "admin") {
-      // Only fetch all employees if the user is an admin
       const allEmployees = await Employee.find();
       employeesToReturn = allEmployees.map((emp, index) => ({
         id: emp._id,
@@ -100,7 +96,6 @@ export const loginEmployee = async (
         picture: `https://randomuser.me/api/portraits/men/${index + 1}.jpg`,
       }));
     } else {
-      // For regular users, only return their own data
       employeesToReturn = [
         {
           id: employee._id,
@@ -111,10 +106,8 @@ export const loginEmployee = async (
       ];
     }
 
-    // Generate token
     const token = await AuthManager.generateToken(payload);
 
-    // Send the response with the necessary data
     res.header("auth-token", token).json({
       token,
       employee: employeePayload,

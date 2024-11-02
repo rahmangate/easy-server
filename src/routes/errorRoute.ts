@@ -1,4 +1,3 @@
-// src/routes/errorRoute.ts
 import express from "express";
 import { CustomError } from "../utils/customError";
 

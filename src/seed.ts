@@ -1,16 +1,13 @@
-// seeder.ts
-
 import { Location } from "./models/Location";
 import { Setting } from "./models/Setting";
 import Logger from "./utils/logger";
 
 const seedData = async () => {
   try {
-    // Check if settings exist
     const existingSettings = await Setting.countDocuments();
     if (existingSettings === 0) {
       const settings = {
-        isGlobalTrackingEnabled: true, // or false based on your requirement
+        isGlobalTrackingEnabled: true,
       };
 
       await Setting.create(settings);
@@ -19,7 +16,6 @@ const seedData = async () => {
       Logger.info("Settings already exist. Seeding skipped.");
     }
 
-    // Check if locations exist (you can add a similar logic for locations)
     const existingLocations = await Location.countDocuments();
     if (existingLocations === 0) {
       const locations = [
